@@ -229,6 +229,8 @@ class LoadMedia:
             self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
             self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
+        self.fps = int(self.cap.get(cv2.CAP_PROP_FPS)) if self.type == 'video' else 30  # Default FPS for webcam
+        self.skip_frames = max(1, self.fps // 10)  # Calculate how many frames to skip to get 5 FPS
         self.path = path
 
     def __iter__(self):
@@ -239,12 +241,18 @@ class LoadMedia:
     def __next__(self):
         """Advances to the next frame in the video or returns the image, raising StopIteration if at the end."""
         if self.type in ["video", "webcam"]:
-            self.cap.grab()
+            
+            for _ in range(self.skip_frames):
+                self.cap.grab()
+
             ret, original_frame = self.cap.retrieve()
             if not ret:
                 self.cap.release()
                 raise StopIteration
-            self.frame += 1
+            
+            self.frame += self.skip_frames
+            time_seconds = self.frame // self.fps
+
             if self.type == "webcam":
                 status = f"{self.type} (frame {self.frame}) Webcam: [{self.path}]: "
             else:
@@ -254,12 +262,13 @@ class LoadMedia:
             if self.frame > 0:
                 raise StopIteration
             self.frame += 1
+            time_seconds = 0 
             status = f"{self.type} {self.path}: "
 
         resized_frame = letterbox(original_frame, self.img_size)[0]  # resize
 
-        return resized_frame, original_frame, status
+        return resized_frame, original_frame, status, time_seconds
 
     def __len__(self):
-        """Returns the number of frames in the video or 1 for an image."""
-        return self.frames if self.type == 'video' else 1
+        
+        return max(1, self.frames // self.skip_frames) if self.type == 'video' else 1
