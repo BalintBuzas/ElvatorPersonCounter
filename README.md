@@ -1,20 +1,3 @@
-# YOLOv5 CrowdHuman ONNX Runtime
-
-![Downloads](https://img.shields.io/github/downloads/yakhyo/yolov5-crowdhuman-onnx/total) [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/yakhyo/yolov5-crowdhuman-onnx)
-
-<video controls autoplay loop src="https://github.com/user-attachments/assets/ade0f186-4dfe-4974-b1e0-a803a2fbd36a" muted="false" width="100%"></video>
-
-
-Video by Coverr from Pexels: https://www.pexels.com/video/black-and-white-video-of-people-853889/
-
-This repository contains code and instructions for performing object detection using the YOLOv5 model with the CrowdHuman dataset, utilizing ONNX Runtime for inference.
-
-## Features
-
-- Inference using ONNX Runtime with GPU (tested on Ubuntu).
-- Easy-to-use Python scripts for inference.
-- Supports multiple input formats: image, video, or webcam.
-
 ## Installation
 
 #### Clone the Repository
@@ -33,12 +16,6 @@ pip install -r requirements.txt
 ## Usage
 
 Before running inference, you need to download weights of the YOLOv5m model trained on CrowdHuman dataset in ONNX format.
-
-#### Download weights (Linux)
-
-```bash
-sh download.sh
-```
 
 #### Download weights from the following links
 
